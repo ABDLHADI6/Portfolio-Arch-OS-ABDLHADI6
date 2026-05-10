@@ -1,0 +1,97 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    padding: 40px;
+    background-color: #ffffff;
+    color: #333333;
+}
+
+/* Dark Mode Colors */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+#dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #fff;
+    z-index: 100;
+}
+
+body.dark-mode #dark-mode-toggle {
+    background: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+nav {
+    margin: 60px 0 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #2c3e50;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+body.dark-mode nav a {
+    color: #ecf0f1;
+    background: #2c3e50;
+    border-color: #34495e;
+}
+
+nav a:hover {
+    background: #e2e6ea;
+}
+
+body.dark-mode nav a:hover {
+    background: #3e5871;
+}
+
+.name {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+body.dark-mode .name {
+    color: #ecf0f1;
+}
+
+.id {
+    color: #7f8c8d;
+    font-weight: normal;
+}
+
+.description {
+    color: #555555;
+    max-width: 800px;
+}
+
+body.dark-mode .description {
+    color: #bdc3c7;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #dee2e6;
+    margin: 20px 0;
+}
+
+body.dark-mode hr {
+    background: #444;
+}
