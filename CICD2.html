@@ -35,7 +35,7 @@
         <section>
             <h2>Lab Overview</h2>
             <p class="description">
-                In this lab, I set up a GitHub Actions pipeline using YAML to automate deploying my website. I moved my project to a new GitHub Classroom repository, created a deployment.yml workflow, and configured it to deploy to GitHub Pages whenever I push to the main branch.
+In this lab, I set up a GitHub Actions pipeline using YAML to automate deploying my website. I moved my project to a new GitHub Classroom repository, created a deployment.yml workflow, and configured it to deploy to GitHub Pages whenever I push to the main branch. I then linked everything together with a navigation bar on a new HTML page.
             </p>
         </section>
 
@@ -43,7 +43,8 @@
 
         <section>
             <h3>Section 1: Fixing the Private Repository Issue</h3>
-            <p>To resolve previous hosting limitations, we transitioned our project to a GitHub Classroom repository. I created a new folder structure with <strong>OriginalAssignment</strong> and <strong>NewAssignment</strong> directories, ported the files from the old project to the new one, and committed the changes with the message <strong>"Ported Assignments."</strong></p>
+<p>To resolve previous hosting limitations, we transitioned our project to a GitHub Classroom repository. I accepted the module assignment and generated a new repository link. On my local machine, I created a new folder structure with OriginalAssignment and NewAssignment directories. I used the command line to pull the previous week's code into the original folder and initialized the new repository in the other. Finally, we ported the files from the old project to the new one and committed the changes with the message "Ported Assignments."</p>
+
                         			<img src="Pictures/3_00.jpg" alt="Local Workspace Setup">			
             			<img src="Pictures/3_01.jpg" alt="Local Workspace Setup">			
 
@@ -53,7 +54,7 @@
 
         <section>
             <h3>Section 2: Moving to GitHub Actions Hosting</h3>
-            <p>We updated our hosting method to move away from manual deployments. In the repository <strong>Settings</strong>, under the <strong>Pages</strong> section, I changed the "Source" dropdown from "Deploy from a branch" to <strong>GitHub Actions</strong>. This allows our site to be built and deployed automatically through a custom pipeline.</p>
+<p>We updated our hosting method to move away from manual deployments. In the repository Settings, under the Pages section, I unpublished the previous site. I then changed the "Source" dropdown from "Deploy from a branch" to GitHub Actions. This allows our site to be built and deployed automatically through a custom pipeline rather than a static branch.</p>
                         			<img src="Pictures/3_02.jpg" alt="Local Workspace Setup">			
 
 			</section>
@@ -62,8 +63,9 @@
 
         <section>
             <h3>Section 3: Setting Up the YAML Pipeline</h3>
-            <p>To define our automation rules, we initiated a new workflow. In the <strong>Actions</strong> tab, I selected "Set up a workflow yourself" and renamed the default file to <code>deployment.yml</code>. This YAML file serves as the instruction manual for GitHub, telling it exactly how to handle our code when changes are pushed.</p>
-                        			<img src="Pictures/3_03.jpg" alt="Local Workspace Setup">			
+ <p>To define our automation rules, we initiated a new workflow. In the Actions tab, I selected "Set up a workflow yourself." I renamed the default file to deployment.yml. This YAML file serves as the instruction manual for GitHub, telling it exactly how to handle our code when changes are pushed.</p>
+
+ <img src="Pictures/3_03.jpg" alt="Local Workspace Setup">			
 
 			</section>
 
@@ -71,7 +73,7 @@
 
         <section>
             <h3>Section 4: Writing the YAML Configuration</h3>
-            <p>We built the pipeline step-by-step using YAML syntax. First, we defined the name and trigger conditions, setting the action to run whenever we <code>push</code> to the <code>main</code> branch. We then specified a job called <strong>project deploy</strong> to run on the <code>ubuntu-latest</code> virtual machine.</p>
+<p>We built the pipeline step-by-step using YAML syntax. First, we defined the name and trigger conditions, setting the action to run whenever we push to the main branch. We then specified a job called project deploy to run on the ubuntu-latest virtual machine.</p>
                         			<img src="Pictures/3_04.jpg" alt="Local Workspace Setup">			
 
 			</section>
@@ -80,7 +82,7 @@
 
         <section>
             <h3>Section 5: Executing the Pipeline and Deployment</h3>
-            <p>After committing the <code>deployment.yml</code> file, we monitored the progress in the <strong>Actions</strong> tab. I observed the virtual machine spinning up and executing each step in real-time. Once the <strong>"Deploy Website"</strong> action completed successfully, I verified the live site via the link provided in the settings.</p>
+<p>After committing the deployment.yml file, we monitored the progress in the Actions tab. I clicked into the running workflow to observe the virtual machine spinning up and executing each step in real-time. Once the "Deploy Website" action completed successfully, I verified the live site via the link provided in the GitHub Pages settings.</p>
                         			<img src="Pictures/3_05.jpg" alt="Local Workspace Setup">			
 
 			</section>
@@ -89,7 +91,7 @@
 
         <section>
             <h3>Section 6: Website Expansion and Interactivity</h3>
-            <p>To improve organization, I created a new HTML page for this lab and connected it to the original <code>index.html</code> using the <code>&lt;a&gt;</code> tag. This ensures a smooth navigation flow and makes the project easier to scale.</p>
+<p>To improve the organization of our work, I created a new HTML page to house the content for this lab. I utilized a hyperlink (using the <a> tag) to connect the original index.html to this new page, ensuring a smooth navigation flow. This structure makes the project easier to scale as we add more lab content.</p>
             <p class="description">
                 <strong>Reflection on Linking Pages:</strong> I joined the pages together by creating a relative link between the two files. By ensuring both files are in the same root directory, the browser can transition between them without needing a full URL path. This is a fundamental concept in multi-page web applications.
             </p>

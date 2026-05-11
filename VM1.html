@@ -31,11 +31,60 @@
 
     <hr>
 
-    <main>
+<main>
         <section>
-            <h3>Virtual Machine Configuration</h3>
-            <p class="description">This section documents the process of setting up a Virtual Machine and configuring a web server to host content.</p>
-            </section>
+            <h2>Lab Overview</h2>
+            <p class="description">
+			In this lab, I accessed two virtual machines: STU-449035-VM1 (deployment) and STU-449035-VM2 (development) using Remote Desktop Connection. After installing Git, I cloned my portfolio onto both VMs. I set up IIS to host my website from the wwwroot folder, making it live at http://stu-449035-vm1.net.dcs.hull.ac.uk. On VM2, I installed VS Code, made a change to my site, and saved it with admin permissions. I then viewed the updated version on VM2's URL. This showed me why having separate development and deployment servers is useful for testing changes safely before going live.
+            </p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>Section 1: Accessing and Setting Up the VM</h3>
+            <p>To move our portfolio to a dedicated server, we utilized Remote Desktop Protocol (RDP). I connected to my assigned virtual machine, STU-449035-VM1, via the Remote Desktop Connection app. After logging in with my university credentials, I accessed the Windows Server environment.
+I then verified the Git installation. Since it was not present, I installed it manually, ensuring the default branch was set to main. Finally, I created a Deployment folder and cloned my portfolio repository directly into the VM environment..</p>
+            			<img src="Pictures/5_00.jpg" alt="Local Workspace Setup">			
+            			<img src="Pictures/5_01.jpg" alt="Local Workspace Setup">			
+            			<img src="Pictures/5_02.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+
+        <section>
+            <h3>Section 2: Hosting with Internet Information Services (IIS)</h3>
+<P>We used IIS (Internet Information Services) to host the site live. I verified that the w3svc (World Wide Web Publishing Service) was active using the Get-Service command in the terminal.
+I navigated to C:\inetpub\wwwroot, moved the default placeholder files to the desktop, and copied my portfolio files into the directory. Because our main file is named index.html, the IIS server automatically served it as the primary landing page.</P>                                    			
+<img src="Pictures/5_03.jpg" alt="Local Workspace Setup">			
+
+			<p>Opened http://stu-449035-vm1.net.dcs.hull.ac.uk from the main device (No VMs).</a></p>
+                        			<img src="Pictures/5_04.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+
+        <section>
+            <h3>Section 3: Setting Up a Development VM</h3>
+<P>I repeated the setup on a second virtual machine, STU-449035-VM2, which serves as my Development environment. On this machine, I created a Development folder for the repository. This setup allows us to separate our "live" site from our "work-in-progress" code.</P>                                    			
+<img src="Pictures/5_05.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+
+        <section>
+            <h3>Section 4: Editing and Permissions</h3>
+<P>I installed Visual Studio Code on the Development VM to make live changes. I opened the files from the wwwroot folder and modified the background color and text. Since wwwroot is a protected system folder, I utilized the "Retry as Admin" prompt to save my changes successfully.</P>
+<P>Finally opened the two websites on my device without using any VMs.</P>
+                        			<img src="Pictures/5_06.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+
     </main>
 
     <script src="script.js"></script>
