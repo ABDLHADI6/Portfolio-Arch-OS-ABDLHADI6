@@ -31,13 +31,75 @@
 
     <hr>
 
-    <main>
+<main>
         <section>
-            <h3>Networking & Connectivity</h3>
-            <p class="description">This section documents the configuration of virtual networks and the results of connectivity tests between the host and the virtual machine.</p>
-            </section>
-    </main>
+            <h2>Lab Overview</h2>
+            <p class="description">
+                In this lab, I tested the virtual network between my two VMs (STU-449035-VM1 and STU-449035-VM2) by using ipconfig to find their IPv4 addresses, then using ping to confirm they could communicate. After that, I set up a self-hosted GitHub runner on my deployment VM, which listens for jobs from GitHub. I then created a new YAML workflow called PushToVM that automatically pushes my portfolio files from GitHub to the wwwroot folder on VM1 whenever I make changes. Finally, I tested the setup and confirmed that my updated website was live on http://stu-449035-vm1.net.dcs.hull.ac.uk.
 
+			</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>Section 1: Network Connectivity Testing</h3>
+            <p>We verified the virtual network by retrieving the IPv4 address of STU-449035-VM1 and STU-449035-VM2 using ipconfig.</p>
+            <p><strong>VM1</strong></p>
+			                        			<img src="Pictures/6_00.jpg" alt="Local Workspace Setup">			
+
+            <p><strong>VM2</strong></p>
+			                        			<img src="Pictures/6_01.jpg" alt="Local Workspace Setup">			
+
+            </section>
+
+        <hr>
+
+        <section>
+            <h3>Section 2: Bi-Directional Verification</h3>
+            <p>I then performed a Ping from VM1 to STU-449035-VM2 to confirm the machines could communicate. To ensure full network transparency, I repeated the connectivity tests from VM2 back to VM1.</p>
+                                    			<img src="Pictures/6_00.jpg" alt="Local Workspace Setup">			
+                        			<img src="Pictures/6_02.jpg" alt="Local Workspace Setup">			
+                        			<img src="Pictures/6_03.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+
+        <section>
+            <h3>Section 3: Configuring the Self-Hosted Runner</h3>
+            <p>I set up a self-hosted GitHub Runner on STU-449035-VM1 to allow GitHub to deploy code directly to my private server. I registered the runner in the repository settings, installed the necessary files on the VM, and executed ./run.cmd. The runner now listens for deployment instructions specifically for this machine.</p>
+            <p><strong>When it was public repo</strong></p>
+			                        			<img src="Pictures/6_04.jpg" alt="Local Workspace Setup">			
+            <p><strong>After changing to private</strong></p>
+			                        			<img src="Pictures/6_05.jpg" alt="Local Workspace Setup">			
+            <p><strong>After following the instructions and running the ./run.cmd:</strong></p>
+			                        			<img src="Pictures/6_06.jpg" alt="Local Workspace Setup">			
+
+            </section>
+
+        <hr>
+
+        <section>
+            <h3>Section 4: Automated CI/CD Pipeline</h3>
+            <p>I created a new GitHub Action workflow, PushToVM.yml, configured with the runs-on: self-hosted tag. I moved the existing files in C:\inetpub\wwwroot to a backup folder and restarted the runner as an Administrator. This allows the pipeline to automatically pull the latest code from GitHub and overwrite the protected web root folder on the VM.</p>
+                                    			<img src="Pictures/6_07.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+
+        <section>
+            <h3>Section 5: Final Deployment Verification</h3>
+            <p>After pushing the new workflow, I verified the deployment by visiting the VM1 web address. The site updated automatically, demonstrating a functional CI/CD pipeline where changes made in the repository are instantly reflected on the private virtual machine.</p>
+            <p>Now we managed to update and change in VM1 using VM2.</p>
+            <p>http://stu-449035-vm1.net.dcs.hull.ac.uk</p>
+                                    			<img src="Pictures/6_08.jpg" alt="Local Workspace Setup">			
+
+			</section>
+
+        <hr>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
