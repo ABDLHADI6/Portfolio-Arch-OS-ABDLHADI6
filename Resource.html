@@ -214,32 +214,121 @@
                 
         <h4>corresponding code</h4>
         <pre><code>
-// C# Implementation Logic
-bool[] finish = new bool[n];
-int[] safeSequence = new int[n];
-int[] work = (int[])available.Clone();
-int count = 0;
+using System;
+using System.Collections.Generic;
 
-while (count < n) {
-    bool found = false;
-    for (int p = 0; p < n; p++) {
-        if (!finish[p]) {
-            bool canAllocate = true;
-            for (int r = 0; r < m; r++) {
-                if (need[p, r] > work[r]) {
-                    canAllocate = false;
-                    break;
+namespace DeadlockDetector
+{
+    class BankerAnalyzer
+    {
+        static void Main()
+        {
+            int procs = 5;
+            int types = 3;
+
+            int[,] allocated = {
+                {0, 1, 0},
+                {2, 0, 0},
+                {3, 0, 2},
+                {2, 1, 1},
+                {0, 0, 2}
+            };
+
+            int[,] maxClaim = {
+                {7, 5, 4},
+                {3, 2, 2},
+                {9, 0, 2},
+                {2, 2, 2},
+                {4, 4, 4}
+            };
+
+            int[] free = {3, 3, 2};
+
+            int[,] need = new int[procs, types];
+            for (int i = 0; i < procs; i++)
+                for (int j = 0; j < types; j++)
+                    need[i, j] = maxClaim[i, j] - allocated[i, j];
+
+            Console.WriteLine("=== BANKER'S ALGORITHM INPUT ===");
+            Console.WriteLine($"Processes: {procs}");
+            Console.WriteLine($"Resource types: {types}");
+
+            Console.WriteLine("\nAllocation Matrix:");
+            for (int i = 0; i < procs; i++)
+            {
+                Console.Write($"P{i + 1}: ");
+                for (int j = 0; j < types; j++)
+                    Console.Write($"{allocated[i, j]} ");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\nMax Need Matrix:");
+            for (int i = 0; i < procs; i++)
+            {
+                Console.Write($"P{i + 1}: ");
+                for (int j = 0; j < types; j++)
+                    Console.Write($"{maxClaim[i, j]} ");
+                Console.WriteLine();
+            }
+
+            Console.Write("\nAvailable Resources: ");
+            for (int j = 0; j < types; j++)
+                Console.Write($"{free[j]} ");
+            Console.WriteLine();
+
+            bool[] done = new bool[procs];
+            int[] work = new int[free.Length];
+            Array.Copy(free, work, free.Length);
+            List<int> sequence = new List<int>();
+
+            int[] order = { 1, 3, 4, 0, 2 };
+
+            foreach (int p in order)
+            {
+                if (!done[p])
+                {
+                    bool canRun = true;
+                    for (int j = 0; j < types; j++)
+                    {
+                        if (need[p, j] > work[j])
+                        {
+                            canRun = false;
+                            break;
+                        }
+                    }
+
+                    if (canRun)
+                    {
+                        for (int j = 0; j < types; j++)
+                            work[j] += allocated[p, j];
+
+                        done[p] = true;
+                        sequence.Add(p);
+                    }
                 }
             }
-            if (canAllocate) {
-                for (int r = 0; r < m; r++) work[r] += allocation[p, r];
-                safeSequence[count++] = p;
-                finish[p] = true;
-                found = true;
+
+            Console.WriteLine("\n=== ANALYSIS RESULT ===");
+            if (sequence.Count == procs)
+            {
+                Console.Write("Safe Order: ");
+                for (int i = 0; i < sequence.Count; i++)
+                {
+                    Console.Write($"P{sequence[i] + 1}");
+                    if (i < sequence.Count - 1)
+                        Console.Write(" → ");
+                }
+                Console.WriteLine("\nStatus: SAFE");
             }
+            else
+            {
+                Console.WriteLine("Status: UNSAFE");
+            }
+
+            Console.WriteLine("\nPress any key to close...");
+            Console.ReadKey();
         }
     }
-    if (!found) break;
 }
         </code></pre>
     </section>
