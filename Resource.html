@@ -31,12 +31,221 @@
 
     <hr>
 
-    <main>
-        <section>
-            <h3>Banker’s Algorithm & Deadlock Avoidance</h3>
-            <p class="description">This section documents the step-by-step process of the Banker’s Algorithm, demonstrating how the OS manages resource allocation to ensure a safe state and avoid system deadlocks.</p>
-            </section>
-    </main>
+<main>
+    <section>
+        <h2>Lab Overview</h2>
+        <p class="description">
+            In this lab, I applied the Banker's Algorithm to analyse system safety for five processes and three resource types. I manually checked safe states under different available resource values (R1=10, then 12; R2=5, then 7) and explained the safe execution order. Finally, I implemented the algorithm in C# to take user inputs and output whether the system is in a safe state.
+        </p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3>Task: Banker’s Algorithm – Manual Safety Analysis</h3>
+        <h4>System Configuration</h4>
+        <p>Five processes (P1 to P5) compete for three resource types (R1, R2, R3). The table below shows each process’s maximum required resources.</p>
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>P1</td><td>7</td><td>5</td><td>4</td></tr>
+                <tr><td>P2</td><td>3</td><td>2</td><td>2</td></tr>
+                <tr><td>P3</td><td>9</td><td>0</td><td>2</td></tr>
+                <tr><td>P4</td><td>2</td><td>2</td><td>2</td></tr>
+                <tr><td>P5</td><td>4</td><td>4</td><td>4</td></tr>
+            </tbody>
+        </table>
+       
+
+        <h4>Assumed Allocation and Available Resources</h4>
+        <p>The following allocation matrix and initial available resources are used for this analysis.</p>
+        <p><strong>Currently Allocated Resources:</strong></p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>P1</td><td>0</td><td>1</td><td>0</td></tr>
+                <tr><td>P2</td><td>2</td><td>0</td><td>0</td></tr>
+                <tr><td>P3</td><td>3</td><td>0</td><td>2</td></tr>
+                <tr><td>P4</td><td>2</td><td>1</td><td>1</td></tr>
+                <tr><td>P5</td><td>0</td><td>0</td><td>2</td></tr>
+            </tbody>
+        </table>
+       
+        <p><strong>Initially Available:</strong> R1 = 3, R2 = 3, R3 = 2</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h4>Step 1: Build the Need Matrix</h4>
+        <p>The remaining need for each process is computed as:<br>
+        <strong>Need = Maximum - Allocation</strong></p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>P1</td><td>7</td><td>4</td><td>4</td></tr>
+                <tr><td>P2</td><td>1</td><td>2</td><td>2</td></tr>
+                <tr><td>P3</td><td>6</td><td>0</td><td>0</td></tr>
+                <tr><td>P4</td><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>P5</td><td>4</td><td>4</td><td>2</td></tr>
+            </tbody>
+        </table>
+       
+    </section>
+
+    <hr>
+
+    <section>
+        <h4>Step 2: Find a Safe Execution Order</h4>
+        <p>Start with the work vector equal to the initial available resources: <strong>Work = (3, 3, 2)</strong></p>
+        <ul>
+            <li><strong>Round 1 – Select P2:</strong> P2’s need (1, 2, 2) is less than or equal to Work (3, 3, 2) → proceed. Release P2’s allocation (2, 0, 0). New Work = (3+2, 3+0, 2+0) = (5, 3, 2). Completed: P2</li>
+            <li><strong>Round 2 – Select P3:</strong> P3 needs (6, 0, 0) ≤ (5, 3, 2) → proceed. Release (3, 0, 2). New Work = (5+3, 3+0, 2+2) = (8, 3, 4). Completed: P2, P3</li>
+            <li><strong>Round 3 – Select P4:</strong> P4 needs (0, 1, 1) ≤ (8, 3, 4) → proceed. Release (2, 1, 1). New Work = (8+2, 3+1, 4+1) = (10, 4, 5). Completed: P2, P3, P4</li>
+            <li><strong>Round 4 – Select P5:</strong> P5 needs (4, 4, 2) ≤ (10, 4, 5) → proceed. Release (0, 0, 2). New Work = (10+0, 4+0, 5+2) = (10, 4, 7). Completed: P2, P3, P4, P5</li>
+            <li><strong>Round 5 – Select P1:</strong> P1 needs (7, 4, 4) ≤ (10, 4, 7) → proceed. Release (0, 1, 0). New Work = (10+0, 4+1, 7+0) = (10, 5, 7). Completed: P2, P3, P4, P5, P1</li>
+        </ul>
+        <p><strong>Final Result:</strong> The system is in a safe state — no deadlock will occur. A valid safe execution sequence is: <strong>P2 → P3 → P4 → P5 → P1</strong></p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3>Task: Increased Available Resources</h3>
+        <p>The system now has more resources available. The updated availability vector is: <strong>Available = (12, 5, 7)</strong></p>
+        <p>The need matrix (derived earlier from Max – Allocation) remains the same:</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>P1</td><td>7</td><td>4</td><td>4</td></tr>
+                <tr><td>P2</td><td>1</td><td>2</td><td>2</td></tr>
+                <tr><td>P3</td><td>6</td><td>0</td><td>0</td></tr>
+                <tr><td>P4</td><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>P5</td><td>4</td><td>4</td><td>2</td></tr>
+            </tbody>
+        </table>
+       
+
+        <p><strong>Finding a Safe Sequence with the New Resources:</strong><br>
+        Initial work vector = Available = (12, 5, 7)</p>
+        <ul>
+            <li><strong>Step 1 – Run P4:</strong> Check if need (0, 1, 1) ≤ (12, 5, 7) → Yes. P4 finishes and returns its allocated resources (2, 1, 1). Work becomes: (12+2, 5+1, 7+1) = (14, 6, 8). Completed: P4</li>
+            <li><strong>Step 2 – Run P2:</strong> Need (1, 2, 2) ≤ (14, 6, 8) → Yes. P2 releases (2, 0, 0). New work: (14+2, 6+0, 8+0) = (16, 6, 8). Completed: P4, P2</li>
+            <li><strong>Step 3 – Run P3:</strong> Need (6, 0, 0) ≤ (16, 6, 8) → Yes. P3 releases (3, 0, 2). New work: (16+3, 6+0, 8+2) = (19, 6, 10). Completed: P4, P2, P3</li>
+            <li><strong>Step 4 – Run P5:</strong> Need (4, 4, 2) ≤ (19, 6, 10) → Yes. P5 releases (0, 0, 2). New work: (19+0, 6+0, 10+2) = (19, 6, 12). Completed: P4, P2, P3, P5</li>
+            <li><strong>Step 5 – Run P1:</strong> Need (7, 4, 4) ≤ (19, 6, 12) → Yes. P1 releases (0, 1, 0). New work: (19+0, 6+1, 12+0) = (19, 7, 12). Completed: P4, P2, P3, P5, P1</li>
+        </ul>
+        <p><strong>Final Outcome:</strong> The system remains in a safe state after the resource increase. One possible safe execution order is: <strong>P4 → P2 → P3 → P5 → P1</strong></p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3>Task: Another Resource Increase</h3>
+        <p>The available resources have been raised again to: <strong>Available = (12, 7, 7)</strong></p>
+        <p>The need matrix stays the same, as maximum demands and allocations have not changed:</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>P1</td><td>7</td><td>4</td><td>4</td></tr>
+                <tr><td>P2</td><td>1</td><td>2</td><td>2</td></tr>
+                <tr><td>P3</td><td>6</td><td>0</td><td>0</td></tr>
+                <tr><td>P4</td><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>P5</td><td>4</td><td>4</td><td>2</td></tr>
+            </tbody>
+        </table>
+       
+
+        <p><strong>Determining a Safe Order Under the New Resources:</strong><br>
+        Initial work vector = (12, 7, 7)</p>
+        <ul>
+            <li><strong>Round 1 – P4:</strong> Need (0, 1, 1) ≤ (12, 7, 7) → eligible. After finishing, P4 gives back (2, 1, 1). Work updates to: (12+2, 7+1, 7+1) = (14, 8, 8). Completed: P4</li>
+            <li><strong>Round 2 – P2:</strong> Need (1, 2, 2) ≤ (14, 8, 8) → eligible. P2 releases (2, 0, 0). Work becomes: (14+2, 8+0, 8+0) = (16, 8, 8). Completed: P4, P2</li>
+            <li><strong>Round 3 – P3:</strong> Need (6, 0, 0) ≤ (16, 8, 8) → eligible. P3 releases (3, 0, 2). Work becomes: (16+3, 8+0, 8+2) = (19, 8, 10). Completed: P4, P2, P3</li>
+            <li><strong>Round 4 – P1:</strong> Need (7, 4, 4) ≤ (19, 8, 10) → eligible. P1 releases (0, 1, 0). Work becomes: (19+0, 8+1, 10+0) = (19, 9, 10). Completed: P4, P2, P3, P1</li>
+            <li><strong>Round 5 – P5:</strong> Need (4, 4, 2) ≤ (19, 9, 10) → eligible. P5 releases (0, 0, 2). Work becomes: (19+0, 9+0, 10+2) = (19, 9, 12). Completed: P4, P2, P3, P1, P5</li>
+        </ul>
+        <p><strong>Final Conclusion:</strong> The system remains in a safe state after this additional resource increase. One valid safe execution sequence is: <strong>P4 → P2 → P3 → P1 → P5</strong></p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3>Banker’s code</h3>
+        <p>I developed a C# code that computes the need matrix, determines whether a safe process execution order exists, and then either displays the safe sequence or reports that the system is in an unsafe state.</p>
+			                        <img src="Pictures/9_00.jpg" alt="Local Workspace Setup">			
+			                        <img src="Pictures/9_01.png" alt="Local Workspace Setup">
+                
+        <h4>corresponding code</h4>
+        <pre><code>
+// C# Implementation Logic
+bool[] finish = new bool[n];
+int[] safeSequence = new int[n];
+int[] work = (int[])available.Clone();
+int count = 0;
+
+while (count < n) {
+    bool found = false;
+    for (int p = 0; p < n; p++) {
+        if (!finish[p]) {
+            bool canAllocate = true;
+            for (int r = 0; r < m; r++) {
+                if (need[p, r] > work[r]) {
+                    canAllocate = false;
+                    break;
+                }
+            }
+            if (canAllocate) {
+                for (int r = 0; r < m; r++) work[r] += allocation[p, r];
+                safeSequence[count++] = p;
+                finish[p] = true;
+                found = true;
+            }
+        }
+    }
+    if (!found) break;
+}
+        </code></pre>
+    </section>
+
+    <hr>
+</main>
 
     <script src="script.js"></script>
 </body>

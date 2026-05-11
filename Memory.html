@@ -31,13 +31,247 @@
 
     <hr>
 
-    <main>
+<main>
         <section>
-            <h3>Memory Management & MMU</h3>
-            <p class="description">This section documents the principles of memory management, including logical to physical address translation and the role of the Memory Management Unit (MMU).</p>
-            </section>
-    </main>
+            <h2>Lab Overview</h2>
+            <p class="description">
+                In this lab, I simulated virtual memory and paging in C#, calculating VPNs, offsets, and PPNs from virtual addresses. I then implemented a 4-entry TLB simulation to track hits, misses, and hit ratios. Finally, I worked on memory interfacing tasks, including using decoders and combining control bits with memory addresses for read/write operations.
+            </p>
+        </section>
 
+        <hr>
+
+        <section>
+            <h2>Lab Report: Memory Management and Address Translation</h2>
+            <h3>Task 1: Virtual Memory Fundamentals and Translation</h3>
+            
+			                        <img src="Pictures/8_00.jpg" alt="Local Workspace Setup">			
+
+			
+            <h4>(i) Virtual Memory Configuration</h4>
+            <p>In this section, we analyzed the memory architecture to determine the system's capacity. By examining the bit distribution provided in the lab specifications, I calculated the following:</p>
+            <ul>
+                <li><strong>Virtual Page Count:</strong> I found that with a 4-bit Virtual Page Number (VPN), the system supports a total of $2^4 = 16$ virtual pages.</li>
+                <li><strong>Page Size (Bytes per Page):</strong> Based on the 8-bit offset, I determined that the size of each page is $2^8 = 256$ bytes.</li>
+            </ul>
+
+            <h4>(ii) Address Translation Trace</h4>
+            <p>We performed a manual step-by-step translation of a load instruction to simulate how the Memory Management Unit (MMU) maps a virtual address to physical memory. We used the virtual address 0x2C8 as our test case.</p>
+            
+            <p><strong>Step 1: Conversion to Binary</strong><br>
+            I began by converting the hexadecimal address into its binary representation to isolate the specific bits:</p>
+            <ul>
+                <li>0x2 $\rightarrow$ 0010</li>
+                <li>0xC $\rightarrow$ 1100</li>
+                <li>0x8 $\rightarrow$ 1000</li>
+            </ul>
+
+            <p><strong>Step 2: Component Extraction (VPN and Offset)</strong><br>
+            Using the previously defined architecture (4-bit VPN and 8-bit offset), I separated the 12-bit binary string:</p>
+            <ul>
+                <li><strong>VPN Identification:</strong> I identified the top 4 bits as 0010, which equates to a VPN of 0x2.</li>
+                <li><strong>Offset Identification:</strong> I identified the bottom 8 bits as 11001000, which equates to an Offset of 0xC8.</li>
+            </ul>
+
+            <p><strong>Step 3: Physical Mapping (PPN)</strong><br>
+            Finally, we consulted the page map to find the physical destination. By looking up VPN 0x2 in the provided table, I confirmed that it maps directly to PPN 0x4.</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>Task 2: Page Frame Boundary Calculations</h3>
+            <p>We analyzed the structure of the main memory's bottom 32K, which is partitioned into eight equal page frames of 4KB (4096 bytes) each. I calculated the specific ending addresses for the frames requested by identifying their starting offsets and adding the frame size (minus one byte) to determine the boundary.</p>
+            
+            <p><strong>Physical Address Range Results:</strong></p>
+            <ul>
+                <li><strong>D (Frame 0):</strong> This frame starts at address 0.
+                    <ul>
+                        <li>Calculation: $0 + 4095$</li>
+                        <li>End Address: 4095</li>
+                    </ul>
+                </li>
+                <li><strong>C (Frame 3):</strong> This frame starts at address 12288.
+                    <ul>
+                        <li>Calculation: $12288 + 4095$</li>
+                        <li>End Address: 16383</li>
+                    </ul>
+                </li>
+                <li><strong>B (Frame 5):</strong> This frame starts at address 20480.
+                    <ul>
+                        <li>Calculation: $20480 + 4095$</li>
+                        <li>End Address: 24575</li>
+                    </ul>
+                </li>
+                <li><strong>A (Frame 7):</strong> This frame starts at address 28672.
+                    <ul>
+                        <li>Calculation: $28672 + 4095$</li>
+                        <li>End Address: 32767</li>
+                    </ul>
+                </li>
+            </ul>
+
+        </section>
+
+			                        <img src="Pictures/8_01.jpg" alt="Local Workspace Setup">			
+
+
+        <hr>
+
+        <section>
+            <h3>Task 3: Multi-Bit Address Translation</h3>
+            <p>In this section, we analyzed a more complex 32-bit virtual address to determine how the Memory Management Unit (MMU) handles larger address spaces. We broke the address down into its constituent parts—the Virtual Page Number (VPN) and the offset—to map it to physical hardware.</p>
+            
+            <p><strong>a) Identifying the Referenced Virtual Page</strong><br>
+            By examining the provided 32-bit address, I isolated the first 20 bits, which represent the VPN.</p>
+            <ul>
+                <li>Binary Representation: 0000 0000 0000 0000 0001</li>
+                <li>Decimal Conversion: 1</li>
+                <li>Result: We are referencing Virtual Page 1.</li>
+            </ul>
+
+            <p><strong>b) Determining the Page Frame Value</strong><br>
+            Next, we consulted the page table to find the status and location of this virtual page.</p>
+            <ul>
+                <li>Status: The Present/Absent bit is 1, confirming the page is currently in RAM.</li>
+                <li>Page Frame Bits: The table provides the binary value 001.</li>
+                <li>Denary Value: 1</li>
+            </ul>
+
+            <p><strong>c) Constructing the Physical Address</strong><br>
+            To find the final location in physical memory, I combined the Page Frame Number (PFN) with the original offset from the virtual address.</p>
+            <ul>
+                <li>Components: I concatenated the page frame bits (001) with the remaining 12 bits of the virtual address (100001011011).</li>
+                <li>Physical Address: 001100001011011</li>
+            </ul>
+
+
+        </section>
+			                        <img src="Pictures/8_02.jpg" alt="Local Workspace Setup">			
+
+        <hr>
+
+        <section>
+            <h3>Task 4: Memory System Capacity Analysis</h3>
+            <p><strong>i. Physical Pages</strong><br>
+            Law: Number of physical pages = Physical Memory Size / Page Size<br>
+            &nbsp;pages</p>
+            
+            <p><strong>ii. Page Table Entries</strong><br>
+            Law: Number of page table entries = Virtual Memory Size / Page Size<br>
+            &nbsp;entries</p>
+            
+            <p><strong>iii. Entry Size</strong><br>
+            Law: Entry size = PPN bits + Control bits<br>
+            &nbsp;bits = 2 bytes</p>
+            
+            <p><strong>iv. Table Memory Overhead</strong><br>
+            Law: Table memory overhead (in pages) = (Total entries × Entry size) / Page size<br>
+            &nbsp;pages</p>
+        </section>
+			                        <img src="Pictures/8_03.jpg" alt="Local Workspace Setup">			
+			                        <img src="Pictures/8_04.png" alt="Local Workspace Setup">			
+
+
+            <h4>corresponding code</h4>
+            <pre><code>
+using System;
+using System.Collections.Generic;
+
+class TlbSlot
+{
+    public int VirtualId;
+    public int PhysicalId;
+}
+
+class SimpleTlb
+{
+    private List<TlbSlot> entries = new List<TlbSlot>();
+    private int capacity = 4;
+
+    public int? Lookup(int vpn)
+    {
+        foreach (var entry in entries)
+        {
+            if (entry.VirtualId == vpn)
+                return entry.PhysicalId;
+        }
+        return null;
+    }
+
+    public void Insert(int vpn, int ppn)
+    {
+        if (entries.Count >= capacity)
+            entries.RemoveAt(0);
+        entries.Add(new TlbSlot { VirtualId = vpn, PhysicalId = ppn });
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        SimpleTlb tlb = new SimpleTlb();
+        int totalAccess = 0;
+        int foundCount = 0;
+
+        int[] virtualAddresses = { 2, 3, 2, 1, 4, 2, 3, 4, 5, 2 };
+
+        foreach (int vaddr in virtualAddresses)
+        {
+            totalAccess++;
+            int? physical = tlb.Lookup(vaddr);
+
+            if (physical.HasValue)
+            {
+                foundCount++;
+                Console.WriteLine($"[OK] VPN {vaddr} -> PPN {physical.Value}");
+            }
+            else
+            {
+                Console.WriteLine($"[MISS] VPN {vaddr} -> loading into TLB");
+                tlb.Insert(vaddr, vaddr);
+            }
+        }
+
+        double hitRate = (double)foundCount / totalAccess;
+        Console.WriteLine($"\n=== TLB PERFORMANCE ===");
+        Console.WriteLine($"Accesses: {totalAccess}");
+        Console.WriteLine($"Hits: {foundCount}");
+        Console.WriteLine($"Rate: {hitRate:P2}");
+    }
+}
+
+            </code></pre>
+
+
+        <hr>
+
+        <section>
+            <h3>Task 5: Memory Interfacing</h3>
+            <h4>5.1 Address Decoding</h4>
+            <p>We explored the hardware requirements for interfacing a specific memory block to a processor. The memory contains 14 unique locations, indexed from 0 to D in hexadecimal.</p>
+            <ul>
+                <li><strong>Address Bit Requirement:</strong> To address all 14 locations, at least 4 address bits ($2^4 = 16$) are required since 3 bits would only provide 8 locations ($2^3 = 8$).</li>
+                <li><strong>Decoder Configuration:</strong> We utilized a 4-to-16 line decoder, which maps 4-bit address inputs to 16 chip select lines, though only outputs CS0 through CS13 are utilized for this specific memory.</li>
+                <li><strong>Data Path:</strong> Each individual memory location is configured to store 4 hexadecimal digits, representing a 16-bit word.</li>
+                <li><strong>Control Signals:</strong> The interface is governed by three primary signals: WR (Active-low write enable), RD (Active-low read enable), and EN (Global memory enable).</li>
+            </ul>
+
+            <h4>5.2 Integrated Control Addressing</h4>
+            <p>We simulated a system where control bits are integrated directly into the memory address pattern. The format used is: WR RD EN A3 A2 A1 A0.</p>
+            <p><strong>Example: Reading Content "FEAD"</strong></p>
+            <ul>
+                <li><strong>Target Identification:</strong> The content "FEAD" is located at Index A in the memory table.</li>
+                <li><strong>Binary Mapping:</strong> Index A (Hex) translates to binary 1010 for the address bits A3 A2 A1 A0.</li>
+                <li><strong>Control Bit Settings:</strong> To perform a "Read" operation on Index A, we set WR = 0, RD = 1, and EN = 1.</li>
+                <li><strong>Combined Pattern:</strong> Concatenating these values gives the binary string 0111010.</li>
+                <li><strong>Hexadecimal Result:</strong> The final combined 7-bit address value is 0x3A.</li>
+            </ul>
+        </section>
+
+        <hr>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
