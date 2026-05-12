@@ -18,8 +18,8 @@ The following tree represents the current organization of the project:
 ├── README.md               # Project documentation (this file)
 ├── Resource.html           # Resource management and allocation
 ├── Scheduling.html         # CPU Scheduling algorithms and reference
-├── VM1.html                # Virtual Machine/Memory concept lab 1
-├── VM2.html                # Virtual Machine/Memory concept lab 2
+├── VM1.html                # Virtual Machine/lab 1
+├── VM2.html                # Virtual Machine/lab 2
 ├── index.html              # Main entry point for the web dashboard
 ├── script.js               # Global JavaScript logic
 └── style.css               # Global stylesheet for all HTML pages
